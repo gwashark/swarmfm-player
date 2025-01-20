@@ -1,0 +1,52 @@
+html, body, div, iframe 
+{
+ margin: 0px; 
+ padding: 0px; 
+ height: 100%; 
+ border: none;
+ overflow-y: hidden;
+}
+
+.titlebar {
+  height: 10%;
+  background: #ad16ad;
+  user-select: none;
+  display: flex;
+  justify-content: flex-end;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+}
+.titlebar-button {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 30px;
+  height: 30px;
+}
+
+.on {
+  animation: pulsing 3s infinite;
+  background: #ff00ff;
+}
+
+@keyframes pulsing {
+  0% {
+    background: #e027e0;
+  }
+  50% {
+    background: #ff00ff;
+  }
+  100% {
+    background: #e027e0;
+  }
+}
+
+.titlebar-button:hover {
+  background: #e027e0;
+}
+
+iframe {
+    pointer-events: none;
+}

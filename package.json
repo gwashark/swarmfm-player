@@ -1,0 +1,16 @@
+{
+  "name": "swarmfm",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "tauri": "tauri"
+  },
+  "devDependencies": {
+    "@tauri-apps/cli": "^2"
+  },
+  "dependencies": {
+    "@tauri-apps/plugin-autostart": "^2.2.0",
+    "@tauri-apps/plugin-dialog": "^2.2.0"
+  }
+}
