@@ -1,6 +1,6 @@
 [package]
 name = "swarmfm"
-version = "0.0.0"
+version = "0.0.1"
 description = "Swarm FM. For all the swarm listeners."
 authors = ["Gwa Shark"]
 edition = "2021"
