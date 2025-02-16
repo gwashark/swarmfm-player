@@ -13,7 +13,6 @@
         "title": "Swarm-FM (Mini Player)",
         "width": 400,
         "height": 275,
-        "resizable": false,
         "decorations": false
       }
     ],
@@ -30,6 +29,7 @@
       "icons/128x128@2x.png",
       "icons/icon.icns",
       "icons/icon.ico"
-    ]
+    ],
+    "externalBin": ["binaries/app"]
   }
 }

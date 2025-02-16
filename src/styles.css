@@ -8,7 +8,7 @@ html, body, div, iframe
 }
 
 .titlebar {
-  height: 10%;
+  height: 27.5px;
   background: #ad16ad;
   user-select: none;
   display: flex;
