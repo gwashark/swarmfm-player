@@ -16,31 +16,26 @@ jobs:
     runs-on: ${{ matrix.platform }}
 
     steps:
-    - uses: actions/checkout@v3
-    - name: setup node
-      uses: actions/setup-node@v3
-      with:
-        node-version: 16
-    - name: install Rust stable
-      uses: dtolnay/rust-toolchain@stable
-    - name: work around spurious network errors in curl 8.0
-      run: |
-        if rustc +stable --version --verbose | grep -q '^release: 1\.7[01]\.'; then
-          echo CARGO_HTTP_MULTIPLEXING=false >> $GITHUB_ENV
-        fi
-    - name: install dependencies (ubuntu only)
-      if: matrix.platform == 'ubuntu-20.04'
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
-    - name: install frontend dependencies
-      run: yarn install # or npm install
-    - uses: tauri-apps/tauri-action@v0
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      with:
-        tagName: v__VERSION__
-        releaseName: 'Swarm FM Player v__VERSION__'
-        releaseBody: 'Edit Release Notes Here before publishing.'
-        releaseDraft: true
-        prerelease: false
+      - uses: actions/checkout@v3
+      - name: setup node
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16
+      - name: install Rust stable
+        uses: dtolnay/rust-toolchain@stable
+      - name: install dependencies (ubuntu only)
+        if: matrix.platform == 'ubuntu-20.04'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y libgtk-3-dev libwebkit2gtk-4.0-dev libappindicator3-dev librsvg2-dev patchelf
+      - name: install frontend dependencies
+        run: yarn install # or npm install
+      - uses: tauri-apps/tauri-action@v0
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tagName: app-v__VERSION__
+          releaseName: 'App v__VERSION__'
+          releaseBody: 'Edit Release Notes Here before publishing.'
+          releaseDraft: true
+          prerelease: false
