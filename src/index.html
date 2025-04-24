@@ -7,7 +7,6 @@
     <title>Swarm FM</title>
     <script type="module" src="/script.js" defer></script>
   </head>
-
   <body>
     <div data-tauri-drag-region class="titlebar">
       <div class="titlebar-button" id="titlebar-autostart" title="Auto Start">
@@ -16,11 +15,11 @@
           width="24"
           height="24"
           viewBox="0 0 24 24"
-        >
+          >
           <path
             fill="currentColor"
             d="m16.56 5.44l-1.45 1.45A5.97 5.97 0 0 1 18 12a6 6 0 0 1-6 6a6 6 0 0 1-6-6c0-2.17 1.16-4.06 2.88-5.12L7.44 5.44A7.96 7.96 0 0 0 4 12a8 8 0 0 0 8 8a8 8 0 0 0 8-8c0-2.72-1.36-5.12-3.44-6.56M13 3h-2v10h2"
-          />
+            />
         </svg>
       </div>
       <div class="titlebar-button" id="titlebar-mute" title="Mute">
@@ -29,11 +28,11 @@
           width="24"
           height="24"
           viewBox="0 0 16 16"
-        >
+          >
           <path
             fill="currentColor"
             d="M11.243 12.993a.75.75 0 0 1-.53-1.281a5.256 5.256 0 0 0 0-7.425a.75.75 0 1 1 1.061-1.061c1.275 1.275 1.977 2.97 1.977 4.773s-.702 3.498-1.977 4.773a.75.75 0 0 1-.53.22zm-2.665-1.415a.75.75 0 0 1-.53-1.281a3.254 3.254 0 0 0 0-4.596a.75.75 0 1 1 1.061-1.061a4.756 4.756 0 0 1 0 6.718a.75.75 0 0 1-.53.22zM6.5 15a.5.5 0 0 1-.354-.146L2.292 11H.499a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h1.793l3.854-3.854A.499.499 0 0 1 7 1.5v13a.5.5 0 0 1-.5.5"
-          />
+            />
         </svg>
       </div>
       <div class="titlebar-button" id="titlebar-pintotop" title="Pin to Top">
@@ -42,11 +41,11 @@
           width="24"
           height="24"
           viewBox="0 0 24 24"
-        >
+          >
           <path
             fill="currentColor"
             d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2z"
-          />
+            />
         </svg>
       </div>
       <div class="titlebar-button" id="titlebar-minimize" title="Minimize">
@@ -55,7 +54,7 @@
           width="24"
           height="24"
           viewBox="0 0 24 24"
-        >
+          >
           <path fill="currentColor" d="M19 13H5v-2h14z" />
         </svg>
       </div>
@@ -65,38 +64,50 @@
           width="1em"
           height="1em"
           viewBox="0 0 24 24"
-        >
+          >
           <path
             fill="currentColor"
             d="M19 6.41L17.59 5L12 10.59L6.41 5L5 6.41L10.59 12L5 17.59L6.41 19L12 13.41L17.59 19L19 17.59L13.41 12z"
-          />
+            />
         </svg>
       </div>
     </div>
-
     <div id="player"></div>
     <script>
       var tag = document.createElement("script");
       tag.src = "https://www.youtube.com/iframe_api";
       var firstScriptTag = document.getElementsByTagName("script")[0];
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-
+      
       var player;
       function onYouTubeIframeAPIReady() {
-        player = new YT.Player("player", {
-          height: "100%",
-          width: "100%",
-          videoId: "thCiTnOzkOM",
-          playerVars: {
-            autoplay: 1,
-            controls: 0,
-          },
-          events: {
-            onReady: onPlayerReady,
-          },
-        });
+        fetch('https://swarmfm.ktrain5369.me/api/livestream', {cache: "no-store"})
+          .then(response => { if (!response.ok) { throw new Error('Network response was not ok'); }
+            return response.text();
+          })
+          .then(data => {
+            data = JSON.parse(data);
+            data = data["rawVideoCode"]
+            console.log(data);
+            const videoId = data;
+            player = new YT.Player('player', {
+              height: '100%',
+              width: '100%',
+              videoId: videoId,
+              playerVars: {
+                'autoplay': 1,
+                'controls': 1
+              },
+              events: {
+                'onReady': onPlayerReady
+              }
+            });
+          })
+          .catch(error => {
+            console.error('Error fetching video ID:', error);
+      });
       }
-
+      
       function onPlayerReady(event) {
         if (localStorage.getItem("muted") === "true") {
           player.mute();
