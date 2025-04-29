@@ -18,6 +18,12 @@ jobs:
         node-version: 16
 
     - name: Install dependencies
+      run: |
+        npm install
+        sudo apt update
+        sudo apt install libwebkit2gtk-4.1-dev build-essential curl wget file libxdo-dev libssl-dev libayatana-appindicator3-dev librsvg2-dev
+
+    - name: Install dependencies
       run: npm install
 
     - name: Build Tauri
