@@ -80,13 +80,29 @@
       firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
       
       var player;
+      var data;
       function onYouTubeIframeAPIReady() {
         fetch('https://swarmfm.ktrain5369.me/api/livestream', {cache: "no-store"})
-          .then(response => { if (!response.ok) { throw new Error('Network response was not ok'); }
+          .then(response => { if (!response.ok) { 
+            throw new Error('Network response was not ok'); 
+          }
             return response.text();
           })
           .then(data => {
             data = JSON.parse(data);
+          })
+          .catch(error => {
+            fetch('https://swarmfm.ktrain5369.me/api/uptime/status', {cache: "no-store"}).then(response => {
+            if (!response.ok) { 
+              throw new Error('Network response was not ok'); 
+            }
+            return response.text().then(data => {
+            data = JSON.parse(data);
+          });
+          })
+            console.error('Error fetching video ID:', error);
+      });
+      data = JSON.parse(data);
             data = data["rawVideoCode"]
             console.log(data);
             const videoId = data;
@@ -102,10 +118,6 @@
                 'onReady': onPlayerReady
               }
             });
-          })
-          .catch(error => {
-            console.error('Error fetching video ID:', error);
-      });
       }
       
       function onPlayerReady(event) {
