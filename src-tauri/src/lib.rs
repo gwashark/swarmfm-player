@@ -3,6 +3,7 @@ pub fn run() {
     use tauri_plugin_autostart::MacosLauncher;
 
     tauri::Builder::default()
+        .plugin(tauri_plugin_http::init())
         .plugin(tauri_plugin_dialog::init())
         .plugin(tauri_plugin_autostart::init(
             MacosLauncher::LaunchAgent,
