@@ -44,7 +44,7 @@
       async function fetchData() {
         //var data = null
           try {
-              const response = await fetch2('https://swarmfm.ktrain5369.me/api/livestream', {cache: "no-store"});
+              const response = await fetch2('https://sw.arm.fm/api/livestream', {cache: "no-store"});
               if (!response.ok) {
                   throw new Error('Network response was not ok');
               }
@@ -55,7 +55,7 @@
               console.error('Error fetching livestream data:', error);
 
               try {
-                  const fallbackResponse = await fetch2('https://swarmfm.ktrain5369.me/api/uptime/status', {cache: "no-store"});
+                  const fallbackResponse = await fetch2('https://uptime.sw.arm.fm/', {cache: "no-store"});
                   if (!fallbackResponse.ok) {
                       throw new Error('Network response was not ok');
                   }
