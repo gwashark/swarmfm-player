@@ -14,8 +14,8 @@
     "core:window:allow-set-always-on-top",
     {
       "identifier": "http:default",
-      "allow": [{ "url": "https://swarmfm.ktrain5369.me/*" }],
-      "deny": [{ "url": "https://google.com" }]
+"allow": [{ "url": "https://sw.arm.fm/*" },{ "url": "https://*.sw.arm.fm/*" }],
+      "deny": [{ "url": "https://google.com/*" }]
     }
   ]
 }
