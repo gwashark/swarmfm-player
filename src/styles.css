@@ -43,10 +43,10 @@ html, body, div, iframe
   }
 }
 
-.titlebar-button:hover {
-  background: #e027e0;
+body {
+  background-color: black;
 }
 
-iframe {
-    pointer-events: none;
+.titlebar-button:hover {
+  background: #e027e0;
 }
