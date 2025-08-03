@@ -5,6 +5,7 @@
         <link rel="stylesheet" href="styles.css"/>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <title>Swarm FM</title>
+        <script src="https://cdn.jsdelivr.net/npm/hls.js@1"></script>
         <script type="module" src="/script.js"></script>
     </head>
     <body>
@@ -35,130 +36,38 @@
                 </svg>
             </div>
         </div>
-        <div id="player"></div>
-        <script src="/script.js"></script>
-    <script>
-      const fetch2 = window.__TAURI__.http.fetch;
-      var tempdata = null;
-      var player;
-      async function fetchData() {
-        //var data = null
-          try {
-              const response = await fetch2('https://sw.arm.fm/api/livestream', {cache: "no-store"});
-              if (!response.ok) {
-                  throw new Error('Network response was not ok');
-              }
-              const responseData = await response.text();
-              tempdata = JSON.parse(responseData);
-              console.log(tempdata);
-          } catch (error) {
-              console.error('Error fetching livestream data:', error);
+      <!-- svelte-ignore a11y_missing_attribute -->
+      <video controls="false" style="height:100%;width: 100%;" id="swarmfm"></video>
+<script>
+  if (Hls.isSupported()) {
+    var video = document.getElementById('swarmfm');
 
-              try {
-                  const fallbackResponse = await fetch2('https://uptime.sw.arm.fm/', {cache: "no-store"});
-                  if (!fallbackResponse.ok) {
-                      throw new Error('Network response was not ok');
-                  }
-                  const fallbackData = await fallbackResponse.text();
-                  tempdata = JSON.parse(fallbackData);
-                  console.log(tempdata);
-              } catch (fallbackError) {
-                  console.error('Error fetching fallback data:', fallbackError);
-              }
-          }
-          const data = tempdata;
-          console.log(data);
-          initializePlayer(data);
-      }
+    // If you are using the ESM version of the library (hls.mjs), you
+    // should specify the "workerPath" config option here if you want
+    // web workers to be used. Note that bundlers (such as webpack)
+    // will likely use the ESM version by default.
+    var hls = new Hls();
 
-      function initializePlayer(data) {
-          var tag = document.createElement("script");
-          tag.src = "https://www.youtube.com/iframe_api";
-          var firstScriptTag = document.getElementsByTagName("script")[0];
-          firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-          var player;
-
-          function onYouTubeIframeAPIReady() {
-              if (data["rawVideoCode"]) {
-                  data = data["rawVideoCode"];
-              } else if (data["videoId"]) {
-                  data = data["videoId"];
-              } else {
-                  throw new Error("No videoId found");
-              }
-              console.log(data);
-              const videoId = data;
-              player = new YT.Player('player', {
-                  height: '100%',
-                  width: '100%',
-                  videoId: videoId,
-                  playerVars: {
-                      'autoplay': 1,
-                      'controls': 0
-                  },
-                  events: {
-                      'onReady': onPlayerReady
-                  }
-              });
-          }
-
-          function onPlayerReady(event) {
-              if (localStorage.getItem("muted") === "true") {
-                  player.mute();
+    // bind them together
+    hls.attachMedia(video);
+    // MEDIA_ATTACHED event is fired by hls object once MediaSource is ready
+    hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+      console.log('video and hls.js are now bound together !');
+    });
+    hls.loadSource('https://customer-x1r232qaorg7edh8.cloudflarestream.com/3a05b1a1049e0f24ef1cd7b51733ff09/manifest/video.m3u8');
+    hls.attachMedia(video);
+    video.controls = false;
+    if (localStorage.getItem("muted") === "true") {
+                  video.muted = true;
                   document.getElementById("titlebar-mute").querySelector("path").setAttribute("d", "M15 9.674V11h-1.326L12 9.326L10.326 11H9V9.674L10.674 8L9 6.326V5h1.326L12 6.674L13.674 5H15v1.326L13.326 8zM6.5 15a.5.5 0 0 1-.354-.146L2.292 11H.499a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h1.793l3.854-3.854A.499.499 0 0 1 7 1.5v13a.5.5 0 0 1-.5.5");
                   document.getElementById("titlebar-mute").querySelector("path").setAttribute("viewBox", "0 0 512 512");
                   document.getElementById("titlebar-mute").title = "Muted";
-              }
-              event.target.playVideo();
-          }
-
-          window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-      }
-      fetchData().then(() => {
-        var tag = document.createElement("script");
-        tag.src = "https://www.youtube.com/iframe_api";
-        var firstScriptTag = document.getElementsByTagName("script")[0];
-        firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-        
-        console.log(tempdata);
-        function onYouTubeIframeAPIReady() {
-          let data = tempdata;
-          if (data["rawVideoCode"]) {
-            data = data["rawVideoCode"];
-          } else if (data["videoId"]) {
-            data = data["videoId"];
-          } else {
-            throw new Error("No videoId found");
-          }
-          console.log(data);
-          const videoId = data;
-          player = new YT.Player('player', {
-            height: '100%',
-            width: '100%',
-            videoId: videoId,
-            playerVars: {
-              'autoplay': 1,
-              'controls': 0
-            },
-            events: {
-              'onReady': onPlayerReady
-            }
-          });
-        }
-
-        window.onYouTubeIframeAPIReady = onYouTubeIframeAPIReady;
-      });
-
-
-      function onPlayerReady(event) {
-          if (localStorage.getItem("muted") === "true") {
-              player.mute();
-              document.getElementById("titlebar-mute").querySelector("path").setAttribute("d", "M15 9.674V11h-1.326L12 9.326L10.326 11H9V9.674L10.674 8L9 6.326V5h1.326L12 6.674L13.674 5H15v1.326L13.326 8zM6.5 15a.5.5 0 0 1-.354-.146L2.292 11H.499a.5.5 0 0 1-.5-.5v-5a.5.5 0 0 1 .5-.5h1.793l3.854-3.854A.499.499 0 0 1 7 1.5v13a.5.5 0 0 1-.5.5");
-              document.getElementById("titlebar-mute").querySelector("path").setAttribute("viewBox", "0 0 512 512");
-              document.getElementById("titlebar-mute").title = "Muted";
-          }
-          event.target.playVideo();
-      }
-  </script>
+    }
+    video.play();
+  }
+  else {
+    console.log("not supported")
+  }
+</script>
     </body>
 </html>
