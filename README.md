@@ -1,3 +1,7 @@
+# TRANSISITONAL NOTICE
+Repo will be moved to https://git.sw.arm.fm/gwashark/swarmfm-player
+And this repo will be archived.
+
 ![image](README/Banner.png)
 
 # Development Steps:
